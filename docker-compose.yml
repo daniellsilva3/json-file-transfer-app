@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "3002:3000"  # Mapeando a porta 3002 da máquina host para a porta 3000 do container
+    volumes:
+      - ./backend:/usr/src/app
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=rootpassword
+      - DB_NAME=mydatabase
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"  # Mapeando a porta 3000 da máquina host para a porta 3000 do container
+    volumes:
+      - ./frontend:/usr/src/app
+    environment:
+      - NODE_ENV=development
+
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabase
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
